@@ -1,0 +1,102 @@
+
+C:\java715amtts\bankapp\bl\testcases>javac -classpath c:\java715amtts\bankapp\bl\classes getAllTestCase.java
+
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes getAllTestCase
+
+First Name: Aradhna
+
+Last Name: Patidar
+
+ Gender : F
+
+PAN number : 5656
+
+ Account Number : 16
+
+--------------------------------------------------------------------------------------------
+
+First Name: Arjun
+
+Last Name: kumar
+
+ Gender : F
+
+PAN number : 434
+
+ Account Number : 15
+
+--------------------------------------------------------------------------------------------
+
+First Name: Nagina
+
+Last Name: Sonti
+
+ Gender : f
+
+PAN number : 444
+
+ Account Number : 3
+ 
+Get All Invoked !
+--------------------------------------------------------------------------------------------
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes updateTestCase Aaru Patidar F 5656 16
+Aaru Patidar F 5656 16
+Updated
+Account update16
+//--------------------------------------------------------------------------------------------------------------------
+
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes deleteTestCase 14
+ Account delete:14
+
+//-----------------------------------------------------------------------------------------------------------------
+
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes addTestCase RamBhajan Sonti M 5j5
+RamBhajan Sonti M 5j5
+ Account Added : 17
+//------------------------------------------------------------------------------------------------------------------
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes getByAccountNumberTestCase 17
+ 
+First Name :RamBhajan
+
+Last Name: Sonti
+
+Gender : M
+
+PAN Number : 5j5
+
+Account  Number : 17
+
+ get By Account Number Invoked
+//-------------------------------------------------------------------------------------------------------------------
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes getByPANNumberTestCase 5j5
+
+First Name :RamBhajan
+
+Last Name: Sonti
+
+Gender : M
+
+PAN Number : 5j5
+
+Account  Number : 17
+
+ get By PAN Number Invoked
+
+//------------------------------------------------------------------------------------------------------------------
+
+C:\java715amtts\bankapp\bl\testcases>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\bl\testcases;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes getCountTestCase
+
+Total Record :4
+ get Count Invoked
+//---------------------------------------------------------------------------------------------------------------------
+Account Manager -
+C:\java715amtts\bankapp\bl\src\com\thinking\machines\banking\bl>javac -d c:\java715amtts\bankapp\bl\classes -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\dl\classes AccountManager.java
+Note: AccountManager.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+

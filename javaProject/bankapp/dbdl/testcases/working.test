@@ -1,0 +1,115 @@
+//---------------------------------------TEST CASE---------------DL START-----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\java715amtts\bankapp\dl\testcases>javac -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes AccountAddTestCase.java
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountAddTestCase ramkrishna patidar f 222
+ramkrishnapatidarf222
+Account added1
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountAddTestCase rajen sonti m 333
+rajensontim333
+Account added2
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountAddTestCase Nagina Sonti f 444
+NaginaSontif444
+Account added3
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountAddTestCase Akila sonti f 555
+Akilasontif555
+Account added4
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountDeleteTestCase 4
+Account deleted4
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountGetAllTestCase
+1
+ramkrishna
+patidar
+f
+222
+2
+rajen
+sonti
+m
+333
+3
+Nagina
+Sonti
+f
+444
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountGetByAccountNumberTestCase 2
+sontim333rajen2
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountGetByPANNumberTestCase 444
+Nagina
+Sonti
+f
+444
+3
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountGetCountTestCase
+Total records in file are=3
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;C:\java715amtts\bankapp\dl\testcases AccountUpdateTestCase 1 Ramkrishna Patidar f 222
+Account update1
+1    Ramkrishna   Patidar    f       222
+
+C:\java715amtts\bankapp\dl\testcases>javac -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes AccountAddTestCase.java
+//---------------------------------------------------------------------ACCOUNT DTO DAO--------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\java715amtts\bankapp\dl\src\com\thinking\machines\banking\dl>javac -d c:\java715amtts\bankapp\dl\classes -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes AccountDAO.java
+
+C:\java715amtts\bankapp\dl\src\com\thinking\machines\banking\dl>javac -d c:\java715amtts\bankapp\dl\classes -classpath c:\java715amtts\bankapp\dl\classes AccountDTO.java
+
+C:\java715amtts\bankapp\dl\src\com\thinking\machines\banking\dl\exceptions>javac -d c:\java715amtts\bankapp\dl\classes DAOException.java
+
+C:\java715amtts\bankapp\dl\src\com\thinking\machines\banking\dl\interfaces>javac -d c:\java715amtts\bankapp\dl\classes -classpath c:\java715amtts\bankapp\dl\classes AccountDAOInterface.java
+C:\java715amtts\bankapp\dl\src\com\thinking\machines\banking\dl\interfaces>javac -d c:\java715amtts\bankapp\dl\classes AccountDTOInterface.java
+//--------------------------------------------------------------------------------------------SEQ ----------------------------------------------------------------------------------------------------------------------
+
+C:\java715amtts\seq\src\com\thinking\machines\seq>javac -d c:\java715amtts\seq\classes -classpath c:\java715amtts\seq\classes SequenceGenerator.java
+
+C:\java715amtts\seq\src\com\thinking\machines\seq\exceptions>javac -d c:\java715amtts\seq\classes SequenceException.java
+
+C:\java715amtts\seq\src\com\thinking\machines\seq\interfaces>javac -d c:\java715amtts\seq\classes -classpath c:\java715amtts\seq\classes SequenceGeneratorInterface.java
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------TEST CASE-----------------------------------------------------------
+
+C:\java715amtts\bankapp\dl\testcases>javac -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes AccountAddTestCase.java
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;c:\java715amtts\bankapp\dl\testcases AccountAddTestCase Sajan Kumar M 666
+SajanKumarM666
+Account added5
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;c:\java715amtts\bankapp\dl\testcases AccountGetAllTestCase
+1
+Ramkrishna
+Patidar
+f
+222
+2
+rajen
+sonti
+m
+333
+3
+Nagina
+Sonti
+f
+444
+5
+Sajan
+Kumar
+M
+666
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;c:\java715amtts\bankapp\dl\testcases AccountGetCountTestCase
+Total records in file are=4
+
+C:\java715amtts\bankapp\dl\testcases>java -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes;c:\java715amtts\bankapp\dl\testcases AccountUpdateTestCase 5 Sanju Mishra F 667
+Account update5
+5    Sanju   Mishra    F       667
+
+//----------------------------------------------------------------------
+Account DAO
+C:\java715amtts\bankapp\dl\src\com\thinking\machines\banking\dl>javac -d c:\java715amtts\bankapp\dl\classes -classpath c:\java715amtts\bankapp\dl\classes;c:\java715amtts\seq\classes AccountDAO.java
+//----------------------------------------------------------------------------------------------

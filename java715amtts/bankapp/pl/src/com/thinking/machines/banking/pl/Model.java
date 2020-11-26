@@ -1,0 +1,824 @@
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.*;
+import javax.swing.table.*;
+import com.thinking.machines.banking.bl.exceptions.*;
+import com.thinking.machines.banking.pl.model.exceptions.*;
+import com.thinking.machines.banking.pl.model.*;
+import com.thinking.machines.banking.bl.*;
+import com.thinking.machines.banking.bl.interfaces.*;
+import com.thinking.machines.banking.bl.exceptions.*;
+import com.thinking.machines.banking.pl.*;
+import com.thinking.machines.banking.bl.pojo.*;
+
+public class Model extends JFrame implements DocumentListener,ActionListener
+{
+private int mode;
+private static final int VIEW_MODE=1;
+private static final int ADD_MODE=2;
+private static final int EDIT_MODE=3;
+private static final int DELETE_MODE=4;
+private static final int EXPORT_TO_PDF_MODE=5;
+private JTable table;
+private JScrollPane jsp;
+private Object[][] data;  
+private JLabel accountLabel,searchLabel,errorLabel,label1,label2,label3,label4;
+private JTextField searchTextField;
+private JButton clearButton;
+JPanel panel1,panel2,panel3,panel4,panel5,panel6,panel7,panel8,panel9,panel10,panel11,panel12,panel13,panel14,panel15,panel16;
+private JTextField accountNumberTextField,firstNameTextField,lastNameTextField,genderTextField,panNumberTextField;
+private JLabel accountNumberLabel,firstNameLabel,lastNameLabel,genderLabel,panNumberLabel,emptyLabel;
+private JLabel  emptyLabel1;
+private JButton addButton,editButton,deleteButton,cancelButton,pdfButton;
+private AccountModel accountModel;
+private Map<Integer,AccountInterface>accountNumberDictionary;
+private Map<String,AccountInterface>panNumberDictionary;
+java.util.List<AccountInterface>allAccount;
+private final TableRowSorter<AccountModel> sorter1;
+Model()
+{
+
+setTitle("Bank Automation");
+try
+{
+accountModel=new AccountModel();
+AccountManagerInterface accountManagerInterface=new AccountManager();
+
+accountNumberDictionary=new HashMap<Integer,AccountInterface>();
+panNumberDictionary=new HashMap<String,AccountInterface>();
+allAccount=accountManagerInterface.getAll();
+
+}
+catch(ProcessException processException)
+{
+errorLabel.setText("ERROR : "+processException.getMessage());
+}
+catch(ValidationException validationException)
+{
+errorLabel.setText("ERROR : "+validationException.getMessage());
+}
+sorter1 = new TableRowSorter<>(accountModel);
+for(AccountInterface dlAccount:allAccount)
+{
+int vAccountNumber=dlAccount.getAccountNumber();
+String vFirstName=dlAccount.getFirstName();
+String vLastName=dlAccount.getLastName();
+String vGender=dlAccount.getGender().toUpperCase();
+String vPANNumber=dlAccount.getPANNumber();
+AccountInterface account=new Account();
+account.setAccountNumber(vAccountNumber);
+account.setFirstName(vFirstName);
+account.setLastName(vLastName);
+account.setGender(vGender);
+account.setPANNumber(vPANNumber);
+accountNumberDictionary.put(vAccountNumber,account);
+panNumberDictionary.put(vPANNumber,account);
+}
+emptyLabel=new JLabel(" ");
+accountLabel=new JLabel("Account");
+accountLabel.setForeground(Color.GRAY);
+accountLabel.setFont(new java.awt.Font("Verdana",java.awt.Font.BOLD,26));
+
+
+table=new JTable(accountModel);
+table.setFont(new java.awt.Font("Verdana",java.awt.Font.BOLD,22));
+table.setForeground(Color.BLUE);
+table.setRowHeight(40);
+jsp=new  JScrollPane(table,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+table.getTableHeader().setFont(new java.awt.Font("Verdana",java.awt.Font.BOLD,22));
+table.setPreferredScrollableViewportSize(
+new Dimension(table.getPreferredSize().width*4,table.getRowHeight()*4));
+
+java.awt.Font font1= new java.awt.Font("Verdana",java.awt.Font.BOLD,30);
+java.awt.Font font2=new java.awt.Font("Verdana",java.awt.Font.PLAIN,23);
+panel1=new JPanel();
+panel1.add(jsp);
+panel2=new JPanel();
+panel2.setLayout(new GridLayout(1,5));
+accountLabel=new JLabel("Account");
+accountLabel.setForeground(Color.GRAY);
+accountLabel.setFont(font1);
+label1=new JLabel("   ");
+label2=new JLabel("           ");
+label3=new JLabel("          ");
+panel2.add(accountLabel);
+panel2.add(label1);
+panel2.add(label2);
+panel2.add(label3);
+panel2.add(label3);
+panel4=new JPanel(new FlowLayout());
+searchLabel=new JLabel("search");
+searchLabel.setForeground(Color.GRAY);
+searchLabel.setFont(font1);
+searchLabel.setLocation(10,10);
+searchTextField=new JTextField(42);
+searchTextField.setFont(font2);
+ImageIcon clearIcon=new ImageIcon("C:/java715amtts/bankapp/images/icon/clear.png");
+clearButton=new JButton(clearIcon);
+clearButton.setForeground(Color.RED);
+clearButton.setFont(font2);
+clearButton.setSize(30,30);
+errorLabel=new JLabel(" ");
+errorLabel.setFont(font2);
+errorLabel.setForeground(Color.RED);
+errorLabel.setSize(100,30);
+panel15=new JPanel();
+panel15.add(errorLabel);
+emptyLabel1=new JLabel("       ");
+panel4.add(searchLabel);
+panel4.add(searchTextField);
+panel4.add(clearButton);
+
+panel4.add(emptyLabel1);
+panel5=new JPanel(new GridLayout(3,1));
+panel5.add(panel2);
+panel5.add(panel4);
+panel5.add(panel15);
+panel6=new JPanel();
+java.awt.Font font6=new java.awt.Font("Verdana",java.awt.Font.PLAIN,20);
+java.awt.Font font7=new java.awt.Font("Verdana",java.awt.Font.BOLD,25);
+accountNumberLabel=new JLabel(" Account No");
+accountNumberLabel.setForeground(Color.GRAY);
+accountNumberLabel.setFont(font7);
+firstNameLabel=new JLabel(" First Name");
+firstNameLabel.setForeground(Color.GRAY);
+firstNameLabel.setFont(font7);
+lastNameLabel=new JLabel(" Last Name ");
+lastNameLabel.setForeground(Color.GRAY);
+lastNameLabel.setFont(font7);
+genderLabel=new JLabel("   Gender   ");
+genderLabel.setForeground(Color.GRAY);
+genderLabel.setFont(font7);
+panNumberLabel=new JLabel("PAN Number");
+panNumberLabel.setForeground(Color.GRAY);
+panNumberLabel.setFont(font7);
+accountNumberTextField=new JTextField(25);
+accountNumberTextField.setFont(font6);
+firstNameTextField=new JTextField(25);
+firstNameTextField.setFont(font6);
+lastNameTextField=new JTextField(25);
+lastNameTextField.setFont(font6);
+genderTextField=new JTextField(25);
+genderTextField.setFont(font6);
+panNumberTextField=new JTextField(25);
+panNumberTextField.setFont(font6);
+panel10=new JPanel();
+panel10.setLayout(new FlowLayout());
+panel10.add(accountNumberLabel);
+panel10.add(accountNumberTextField);
+panel11=new JPanel();
+panel11.setLayout(new FlowLayout());
+panel11.add(firstNameLabel);
+panel11.add(firstNameTextField);
+panel12=new JPanel();
+panel12.setLayout(new FlowLayout());
+panel12.add(lastNameLabel);
+panel12.add(lastNameTextField);
+panel13=new JPanel();
+panel13.setLayout(new FlowLayout());
+panel13.add(genderLabel);
+panel13.add(genderTextField);
+panel14=new JPanel();
+panel14.setLayout(new FlowLayout());
+panel14.add(panNumberLabel);
+panel14.add(panNumberTextField);
+panel6.setLayout(new GridLayout(5,1));
+panel6.add(panel10);
+panel6.add(panel11);
+panel6.add(panel12);
+panel6.add(panel13);
+panel6.add(panel14);
+panel7=new JPanel();
+java.awt.Font font12=new java.awt.Font("Verdana",java.awt.Font.BOLD,20);
+ImageIcon saveIcon=new ImageIcon("C:/java715amtts/bankapp/images/icon/save.png");
+addButton=new JButton(saveIcon);
+addButton.setFont(font12);
+ImageIcon editIcon=new ImageIcon("C:/java715amtts/bankapp/images/icon/edit.png");
+editButton=new JButton(editIcon);
+editButton.setFont(font12);
+ImageIcon deleteIcon=new ImageIcon("C:/java715amtts/bankapp/images/icon/delete.png");
+deleteButton=new JButton(deleteIcon);
+deleteButton.setFont(font12);
+ImageIcon cancelIcon=new ImageIcon("C:/java715amtts/bankapp/images/icon/cancel.jpg");
+cancelButton=new JButton(cancelIcon);
+cancelButton.setFont(font12);
+ImageIcon pdfIcon=new ImageIcon("C:/java715amtts/bankapp/images/icon/pdf.png");
+pdfButton=new JButton(pdfIcon);
+pdfButton.setFont(font12);
+panel7.setLayout(new FlowLayout());
+panel7.add(addButton);
+panel7.add(editButton);
+panel7.add(deleteButton);
+panel7.add(cancelButton);
+panel7.add(pdfButton);
+panel9=new JPanel();
+panel9.setLayout(new  BorderLayout());
+panel9.add(panel5,BorderLayout.NORTH);
+panel9.add(panel1,BorderLayout.CENTER);
+panel3=new JPanel();
+panel3.setLayout(new BorderLayout());
+panel3.add(panel9,BorderLayout.NORTH);
+panel3.add(panel6,BorderLayout.CENTER);
+panel3.add(panel7,BorderLayout.SOUTH);
+add(panel3);
+this.setViewMode();
+table.setRowSorter(sorter1);
+searchTextField.getDocument().addDocumentListener(this);
+clearButton.addActionListener(this);
+addButton.addActionListener(this);
+editButton.addActionListener(this);
+deleteButton.addActionListener(this);
+cancelButton.addActionListener(this);
+pdfButton.addActionListener(this);
+setDefaultCloseOperation(EXIT_ON_CLOSE);
+setSize(600,600);
+setLocation(100,100);
+setVisible(true);
+}
+public void insertUpdate(DocumentEvent ev)
+{
+search(searchTextField.getText().trim().toUpperCase());
+}
+public void removeUpdate(DocumentEvent ev)
+{
+search(searchTextField.getText().toUpperCase().trim());
+}
+public void changedUpdate(DocumentEvent ev)
+{
+search(searchTextField.getText().trim().toUpperCase());
+}
+public void search(String s)
+{
+if(s.length()==0)
+{
+sorter1.setRowFilter(null);
+}
+else
+{
+sorter1.setRowFilter(RowFilter.regexFilter(s));
+}
+}
+private void setAddMode()
+{
+mode=ADD_MODE;
+accountNumberTextField.setVisible(false);
+firstNameTextField.setEnabled(true);
+lastNameTextField.setEnabled(true);
+genderTextField.setEnabled(true);
+panNumberTextField.setEnabled(true);
+accountNumberLabel.setVisible(false);
+searchTextField.setEnabled(false);
+clearButton.setEnabled(false);
+table.setEnabled(false);
+table.setVisible(false);
+editButton.setEnabled(false);
+cancelButton.setEnabled(true);
+deleteButton.setEnabled(false);
+pdfButton.setEnabled(false);
+}
+private void setEditMode()
+{
+mode=EDIT_MODE;
+firstNameTextField.setEnabled(true);
+lastNameTextField.setEnabled(true);
+genderTextField.setEnabled(true);
+panNumberTextField.setEnabled(true);
+accountNumberTextField.setEnabled(true);
+searchTextField.setEnabled(false);
+clearButton.setEnabled(false);
+table.setEnabled(false);
+table.setVisible(false);
+addButton.setEnabled(false);
+cancelButton.setEnabled(true);
+deleteButton.setEnabled(false);
+pdfButton.setEnabled(false);
+}
+private void setDeleteMode()
+{
+mode=DELETE_MODE;
+accountNumberLabel.setVisible(true);
+accountNumberTextField.setVisible(true);
+accountNumberLabel.setEnabled(true);
+accountNumberTextField.setEnabled(true);
+firstNameLabel.setVisible(false);
+firstNameTextField.setVisible(false);
+lastNameLabel.setVisible(false);
+lastNameTextField.setVisible(false);
+genderLabel.setVisible(false);
+genderTextField.setVisible(false);
+panNumberLabel.setVisible(false);
+panNumberTextField.setVisible(false);
+searchTextField.setEnabled(false);
+clearButton.setEnabled(false);
+table.setEnabled(false);
+table.setVisible(false);
+addButton.setEnabled(false);
+cancelButton.setEnabled(true);
+editButton.setEnabled(false);
+pdfButton.setEnabled(false);
+}
+private void setViewMode()
+{
+mode=VIEW_MODE;
+searchTextField.setEnabled(true);
+clearButton.setEnabled(true);
+table.setEnabled(true);
+table.setVisible(true);
+addButton.setEnabled(true);
+cancelButton.setEnabled(false);
+editButton.setEnabled(true);
+pdfButton.setEnabled(true);
+deleteButton.setEnabled(true);
+accountNumberTextField.setEnabled(false);
+firstNameTextField.setEnabled(false);
+lastNameTextField.setEnabled(false);
+genderTextField.setEnabled(false);
+panNumberTextField.setEnabled(false);
+accountNumberTextField.setVisible(true);
+firstNameTextField.setVisible(true);
+lastNameTextField.setVisible(true);
+genderTextField.setVisible(true);
+panNumberTextField.setVisible(true);
+accountNumberLabel.setVisible(true);
+firstNameLabel.setVisible(true);
+lastNameLabel.setVisible(true);
+genderLabel.setVisible(true);
+panNumberLabel.setVisible(true);
+searchTextField.requestFocus();
+}//@
+private void setPDFMode()
+{
+mode=EXPORT_TO_PDF_MODE;
+addButton.setEnabled(false);
+editButton.setEnabled(false);
+cancelButton.setEnabled(true);
+deleteButton.setEnabled(false);
+pdfButton.setEnabled(true);
+table.setEnabled(false);
+searchTextField.setEnabled(false);
+clearButton.setEnabled(false);
+}//end pdf mode
+public void actionPerformed(ActionEvent ev) 
+{
+if(ev.getSource()==clearButton)
+{
+searchTextField.setText("");
+searchTextField.requestFocus();
+}
+if(ev.getSource()==addButton)
+{
+if(mode==VIEW_MODE)
+{
+this.setAddMode();
+firstNameTextField.requestFocus();
+}
+else
+{
+try
+{
+String firstName=firstNameTextField.getText().toString().trim();
+String lastName=lastNameTextField.getText().toString().trim();
+String gender=genderTextField.getText().toString().trim().toUpperCase();
+gender=gender.toUpperCase();
+String panNumber=panNumberTextField.getText().toString().trim();
+panNumber=panNumber.toUpperCase();
+if(firstName==null||firstName.trim().length()==0)
+{
+JOptionPane.showMessageDialog(null,"First Name Required","ERROR",JOptionPane.ERROR_MESSAGE);
+firstNameTextField.requestFocus();
+return;
+}
+else if(firstName.trim().length()>20)
+{
+JOptionPane.showMessageDialog(null,"First Name,  Can not exceed 20 characters","ERROR",JOptionPane.ERROR_MESSAGE);
+firstNameTextField.requestFocus();
+firstNameTextField.setText(" ");
+return;
+}
+else
+{
+if(lastName==null|| lastName.trim().length()==0)
+{
+JOptionPane.showMessageDialog(null,"Last Name Required","ERROR",JOptionPane.ERROR_MESSAGE);
+lastNameTextField.requestFocus();
+return;
+}
+else if(lastName.trim().length()>20)
+{
+JOptionPane.showMessageDialog(null,"Last Name,  Can not exceed 20 characters","ERROR",JOptionPane.ERROR_MESSAGE);
+lastNameTextField.requestFocus();
+lastNameTextField.setText(" ");
+return;
+}
+else
+{
+if(gender==null||(gender.trim().equals("M")==false&&gender.trim().equals("F")==false))
+{
+if(gender==null)
+{
+JOptionPane.showMessageDialog(null,"Gender, Required","ERROR",JOptionPane.ERROR_MESSAGE);
+genderTextField.requestFocus();
+return;
+}
+else 
+{
+JOptionPane.showMessageDialog(null,"Gender Required(M/F)","ERROR",JOptionPane.ERROR_MESSAGE);
+genderTextField.requestFocus();
+genderTextField.setText("  ");
+return;
+}
+}
+else
+{
+if(panNumber==null|| panNumber.trim().length()==0)
+{
+ JOptionPane.showMessageDialog(null,"PAN Number Required ","ERROR",JOptionPane.ERROR_MESSAGE);
+panNumberTextField.requestFocus();
+return;
+}
+else if(panNumber.trim().length()>10)
+{
+ JOptionPane.showMessageDialog(null,"PAN Number ,Can not exceed 10 Characters","ERROR",JOptionPane.ERROR_MESSAGE);
+panNumberTextField.requestFocus();
+panNumberTextField.setText("  ");
+return;
+}
+}
+}
+}
+if(panNumberDictionary.containsKey(panNumber)==true)
+{
+JOptionPane.showMessageDialog(null,"PAN Number Already alloted to another Account Number ","ERROR",JOptionPane.ERROR_MESSAGE);
+panNumberTextField.requestFocus();
+panNumberTextField.setText(" ");
+return;
+}
+AccountInterface accountInterface=new Account();
+accountInterface.setFirstName(firstName);
+accountInterface.setLastName(lastName);
+accountInterface.setGender(gender);
+accountInterface.setPANNumber(panNumber);
+AccountModel accountModel=new AccountModel();
+accountModel.addAccount(accountInterface);
+int accountNumber=accountInterface.getAccountNumber();
+errorLabel.setText(" ");
+JOptionPane.showMessageDialog(this,"Account Added");
+
+firstNameTextField.setText(" ");
+lastNameTextField.setText(" ");
+genderTextField.setText(" ");
+panNumberTextField.setText(" ");
+cancelButton.setEnabled(true);
+firstNameTextField.requestFocus();
+accountNumberDictionary.put(new Integer(accountNumber),accountInterface);
+panNumberDictionary.put(panNumber,accountInterface);
+
+}
+catch(ProcessException processException)
+{
+errorLabel.setText("ERROR :"+processException.getMessage());
+}
+catch(ModelException modelException)
+{
+errorLabel.setText("ERROR : "+modelException.getMessage());
+}
+catch(NumberFormatException nfe)
+{
+errorLabel.setText("ERROR : "+nfe.getMessage());
+}
+}//else
+}
+if(ev.getSource()==editButton)
+{
+if(mode==VIEW_MODE)
+{
+this.setEditMode();
+accountNumberTextField.requestFocus();
+}
+else
+{
+try
+{
+String firstName=firstNameTextField.getText().toString().trim();
+String lastName=lastNameTextField.getText().toString().trim();
+String gender=genderTextField.getText().toString().trim();
+gender=gender.toUpperCase();
+String panNumber=panNumberTextField.getText().toString().trim();
+panNumber=panNumber.toUpperCase();
+int accountNumber=Integer.parseInt(accountNumberTextField.getText().trim());
+if(firstName==null||firstName.trim().length()==0)
+{
+JOptionPane.showMessageDialog(null,"First Name Required","ERROR",JOptionPane.ERROR_MESSAGE);
+firstNameTextField.requestFocus();
+return;
+}
+else if(firstName.trim().length()>20)
+{
+JOptionPane.showMessageDialog(null,"First Name,  Can not exceed 20 characters","ERROR",JOptionPane.ERROR_MESSAGE);
+firstNameTextField.requestFocus();
+firstNameTextField.setText(" ");
+return;
+}
+else
+{
+if(lastName==null|| lastName.trim().length()==0)
+{
+JOptionPane.showMessageDialog(null,"Last Name Required","ERROR",JOptionPane.ERROR_MESSAGE);
+lastNameTextField.requestFocus();
+return;
+}
+else if(lastName.trim().length()>20)
+{
+JOptionPane.showMessageDialog(null,"Last Name,  Can not exceed 20 characters","ERROR",JOptionPane.ERROR_MESSAGE);
+lastNameTextField.requestFocus();
+lastNameTextField.setText(" ");
+return;
+}
+else
+{
+if(gender==null||(gender.trim().equals("M")==false&&gender.trim().equals("F")==false))
+{
+if(gender==null)
+{
+JOptionPane.showMessageDialog(null,"Gender, Required","ERROR",JOptionPane.ERROR_MESSAGE);
+genderTextField.requestFocus();
+return;
+}
+else
+{
+ JOptionPane.showMessageDialog(null,"Gender Required(M/F)","ERROR",JOptionPane.ERROR_MESSAGE);
+genderTextField.requestFocus();
+genderTextField.setText(" ");
+return;
+}
+}
+else
+{
+if(panNumber==null|| panNumber.trim().length()==0)
+{
+ JOptionPane.showMessageDialog(null,"PAN Number Required ","ERROR",JOptionPane.ERROR_MESSAGE);
+panNumberTextField.requestFocus();
+return;
+}
+else if(panNumber.trim().length()>10)
+{
+ JOptionPane.showMessageDialog(null,"PAN Number ,Can not exceed 10 Characters","ERROR",JOptionPane.ERROR_MESSAGE);
+panNumberTextField.requestFocus();
+panNumberTextField.setText(" ");
+return;
+}
+else
+{
+if(accountNumber<=0)
+{
+ JOptionPane.showMessageDialog(null,"Enter a valid Account Number","ERROR",JOptionPane.ERROR_MESSAGE);
+accountNumberTextField.requestFocus();
+accountNumberTextField.setText("  ");
+errorLabel.setText(" ");
+return;
+}
+}
+}
+}
+}
+/*
+if(panNumberDictionary.containsKey(panNumber)==true)
+{
+JOptionPane.showMessageDialog(null,"PAN Number Already alloted to another Account Number ","ERROR",JOptionPane.ERROR_MESSAGE);
+panNumberTextField.requestFocus();
+errorLabel.setText(" ");
+panNumberTextField.setText(" ");
+return;
+}
+*/
+AccountInterface accountInterface=new Account();
+accountInterface.setFirstName(firstName);
+accountInterface.setLastName(lastName);
+accountInterface.setGender(gender);
+accountInterface.setPANNumber(panNumber);
+accountInterface.setAccountNumber(accountNumber);
+if(accountNumberDictionary.containsKey(accountNumber)==false)
+{
+ JOptionPane.showMessageDialog(null,"Account Number doesn't exist","ERROR",JOptionPane.ERROR_MESSAGE);
+accountNumberTextField.requestFocus();
+accountNumberTextField.setText("  ");
+errorLabel.setText(" ");
+firstNameTextField.setText(" ");
+lastNameTextField.setText(" ");
+genderTextField.setText(" ");
+panNumberTextField.setText(" ");
+return;
+}
+AccountModel accountModel=new AccountModel();
+accountModel.updateAccount(accountInterface);
+errorLabel.setText(" ");
+JOptionPane.showMessageDialog(this,"Account Updated");
+firstNameTextField.setText(" ");
+lastNameTextField.setText(" ");
+genderTextField.setText(" ");
+panNumberTextField.setText(" ");
+accountNumberTextField.setText(" ");
+cancelButton.setEnabled(true);
+editButton.setEnabled(true);
+addButton.setEnabled(false);
+accountNumberTextField.requestFocus();
+errorLabel.setText("  ");
+}
+catch(ProcessException processException)
+{
+errorLabel.setText("ERROR : "+processException.getMessage());
+}
+catch(ModelException modelException)
+{
+errorLabel.setText("ERROR : "+modelException.getMessage());
+}
+catch(NumberFormatException nfe)
+{
+errorLabel.setText("ERROR : "+nfe.getMessage());
+}
+}//else
+}
+if(ev.getSource()==deleteButton)
+{
+int selectedOption=0;
+if(mode==VIEW_MODE)
+{
+this.setDeleteMode();
+accountNumberTextField.requestFocus();
+}
+else
+{
+try
+{
+int accountNumber;
+AccountInterface accountInterface=new Account();
+accountNumber=Integer.parseInt(accountNumberTextField.getText().trim());
+if(accountNumber<=0)
+{
+ JOptionPane.showMessageDialog(null,"Enter a valid Account Number","ERROR",JOptionPane.ERROR_MESSAGE);
+accountNumberTextField.requestFocus();
+accountNumberTextField.setText("  ");
+errorLabel.setText(" ");
+return;
+}
+if(accountNumberDictionary.containsKey(accountNumber)==false)
+{
+ JOptionPane.showMessageDialog(null,"Account Number Does not exist","ERROR",JOptionPane.ERROR_MESSAGE);
+accountNumberTextField.requestFocus();
+accountNumberTextField.setText("  ");
+errorLabel.setText(" ");
+return;
+}
+AccountModel accountModel=new AccountModel();
+selectedOption=JOptionPane.showConfirmDialog(this,"Delete , Account Number : "+accountNumber,"Delete Confirmation",JOptionPane.YES_NO_OPTION);
+if(selectedOption==JOptionPane.YES_OPTION)
+{
+accountModel.deleteAccount(accountNumber);
+errorLabel.setText(" ");
+JOptionPane.showMessageDialog(this,"Account deleted");
+errorLabel.setText("  ");
+accountNumberTextField.setText(" ");
+cancelButton.setEnabled(true);
+accountNumberTextField.requestFocus();
+}
+accountNumberTextField.setText("  ");
+accountNumberTextField.requestFocus();
+cancelButton.setEnabled(true);
+errorLabel.setText(" ");
+}
+catch(ProcessException processException)
+{
+errorLabel.setText("ERROR : "+processException.getMessage());
+}
+catch(ModelException modelException)
+{
+errorLabel.setText("ERROR : "+modelException.getMessage());
+}
+catch(NumberFormatException nfe)
+{
+errorLabel.setText("ERROR : "+nfe.getMessage());
+}
+}//else
+}
+if(ev.getSource()==cancelButton)
+{
+this.setViewMode();
+accountNumberTextField.setText("  ");
+firstNameTextField.setText(" ");
+lastNameTextField.setText(" ");
+genderTextField.setText("  ");
+panNumberTextField.setText(" ");
+errorLabel.setText(" ");
+}
+
+if(ev.getSource()==pdfButton)
+{
+
+if(mode==VIEW_MODE)
+{
+this.setPDFMode();
+}
+else
+{
+this.print();
+}//else
+}//pdf button end
+}
+public void print()
+{
+Paragraph firm,reportTitle,blank,p;
+boolean newPage=true;
+int totalRecords;
+totalRecords=accountModel.getRowCount();
+int i=0;
+PdfPTable tab=null;
+int pageSize=39;
+int count=accountModel.getRowCount();
+Document document=new Document();
+JFrame parentFrame = new JFrame();
+JFileChooser fileChooser = new JFileChooser();
+fileChooser.setDialogTitle("Specify a file to save");   
+int userSelection = fileChooser.showSaveDialog(parentFrame);
+if (userSelection == JFileChooser.APPROVE_OPTION)
+{
+File fileToSave = fileChooser.getSelectedFile();
+String fileName=fileToSave.getAbsolutePath();
+if(fileName.toUpperCase().endsWith(".PDF")==false) 
+{
+fileName=fileName+".pdf"; 
+} 
+try
+{
+PdfWriter.getInstance(document,new FileOutputStream(fileName));
+document.open();
+while(i<totalRecords)
+{
+if(newPage)
+{
+firm=new Paragraph("Swift Bank Corporation");
+document.add(firm);
+reportTitle=new Paragraph("Bank Automation");
+document.add(reportTitle);
+blank=new Paragraph("      ");
+document.add(blank);
+tab=new PdfPTable(3);
+tab.addCell("S.No.");
+tab.addCell("Account No.");
+tab.addCell("Name");
+}//header part end
+newPage=false;
+Object obj1 = accountModel.getValueAt(i, 0);
+Object obj2 = accountModel.getValueAt(i, 1);
+Object obj3 = accountModel.getValueAt(i, 2);
+String value1=obj1.toString();
+String value2=obj2.toString();
+String value3=obj3.toString();
+tab.addCell(value1);
+tab.addCell(value2);
+tab.addCell(value3);
+i++;
+if(i%pageSize==0||i==totalRecords)
+{
+document.add(tab);
+p=new Paragraph("   ");
+document.add(p);
+java.util.Date today=new java.util.Date();
+p=new Paragraph("Generated on :"+today);
+document.add(p);
+p=new Paragraph("Software by : Vision");
+document.add(p);
+//footer end
+if(i<totalRecords)
+{
+newPage=true;
+document.newPage();
+}
+}
+}//while end here
+document.close();
+JOptionPane.showMessageDialog(this,"PDF Created");
+}//try
+catch(FileNotFoundException fnfe)
+{
+JOptionPane.showMessageDialog(null,fnfe.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+}
+catch(DocumentException de)
+{
+JOptionPane.showMessageDialog(null,de.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+}
+catch(Exception e)
+{
+JOptionPane.showMessageDialog(null,e.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+}
+}//approved confirm
+}//print() end here
+public static void main (String args[])
+{
+new Model();
+}
+}

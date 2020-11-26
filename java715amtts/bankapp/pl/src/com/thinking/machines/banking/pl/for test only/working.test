@@ -1,0 +1,13 @@
+
+Model 
+compile
+C:\java715amtts\bankapp\pl\src\com\thinking\machines\banking\pl>javac -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\pl\classes;c:\java715amtts\bankapp\pl\src\com\thinking\machines\banking\pl\com.lowagie.text-2.1.7.jar Model.java
+run
+C:\java715amtts\bankapp\pl\src\com\thinking\machines\banking\pl>java -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\pl\classes;c:\java715amtts\seq\classes;c:\java715amtts\bankapp\dl\classes;c:\java715amtts\bankapp\pl\src\com\thinking\machines\banking\pl\com.lowagie.text-2.1.7.jar;c:\java715amtts\bankapp\pl\src\com\thinking\machines\banking\pl Model
+//-------------------------------------------------------------------------------------------------------------------------------------
+Account Model
+compile
+C:\java715amtts\bankapp\pl\src\com\thinking\machines\banking\pl\model>javac -d c:\java715amtts\bankapp\pl\classes -classpath c:\java715amtts\bankapp\bl\classes;c:\java715amtts\bankapp\pl\classes AccountModel.java
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
